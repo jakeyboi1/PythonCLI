@@ -7,8 +7,6 @@ def createTemplate():
     print("input the directory the script should be located at")
     input2 = input()
 
-
-
     if input1 != '' and input2!= '': #making sure that the inputs are not empty
         #Main Dir Creation
         path = os.path.join(input2, input1)

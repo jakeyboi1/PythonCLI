@@ -1,6 +1,5 @@
 from pick import pick
 import subprocess
-import os
 import json
 import sys
 import time
@@ -13,7 +12,7 @@ def copy2clip(txt):
     return subprocess.check_call(cmd, shell=True)
 
 def getAllPasswords():
-    with open(sys.path[0] + '\services\data\passwordManagerStorage.json') as test_file: #selects the file since they are in the same folder/dir
+    with open(sys.path[0] + '\data\passwordManagerStorage.json') as test_file: #selects the file since they are in the same folder/dir
         test = json.load(test_file) #loads it into a python obj
 
     # This part of the code is what retrieves the password for the selected site
@@ -59,7 +58,7 @@ def passwordManager():
         sitePass = input('Input your password: ')
 
 
-        with open(sys.path[0] + '\services\data\passwordManagerStorage.json','r+') as file:
+        with open(sys.path[0] + '\data\passwordManagerStorage.json','r+') as file:
             # First we load existing data into a dict.
             file_data = json.load(file)
             # Join new_data with file_data inside emp_details
@@ -84,11 +83,11 @@ def passwordManager():
         i = 0 #since the .pop index starts at -1 not 0
         for title in sites: #sorts thru all entries in the json ob
             if title == option2: #if title equals seleciton then
-                with open(sys.path[0] + '\services\data\passwordManagerStorage.json') as file:
+                with open(sys.path[0] + '\data\passwordManagerStorage.json') as file:
                     data = json.load(file)
                     data["passwords"].pop(indexs[i])
 
-                with open(sys.path[0] + '\services\data\passwordManagerStorage.json','w') as file:
+                with open(sys.path[0] + '\data\passwordManagerStorage.json','w') as file:
                     json.dump(data, file)
             i = i + 1
 
