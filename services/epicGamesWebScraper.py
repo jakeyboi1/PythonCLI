@@ -1,11 +1,8 @@
 import requests
-from bs4 import BeautifulSoup
 import json
 
 def viewFreeGamesOfTheWeek():
     r = requests.get('https://store-site-backend-static.ak.epicgames.com/freeGamesPromotions', headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-    soup = str(BeautifulSoup(r.content, 'html.parser'))
-    split = soup.split("\n")
     loadedData = json.loads(r.content)
     if 'data' in loadedData:
         if 'Catalog' in loadedData['data']:
