@@ -59,8 +59,8 @@ def cfxWebScraperMain():
                     rateLimitPrint = False
                     print("Did not get rate limited.")
                     time.sleep(.3) #Best wait amount to balance not being rate limited but keep decent speed as with .3 it rarely gets rate limited (If no rate limits occur the process with the current amount of servers (24190) will take around 2 hours to complete and update the cache)
+                    output.append(recInfo)
 
-            output.append(recInfo)
 
         print("Begin Analyzing data...")
         fivem = {
@@ -74,23 +74,24 @@ def cfxWebScraperMain():
         data = output
         for p in range(len(data)):
             serverLoaded = json.loads(data[p])
-            server = serverLoaded["Data"]
-            if server['vars']['gamename'] == 'gta5':
-                fivem['players'] += len(server['players'])
-                for ps in range(len(server['resources'])):
-                    resource = server['resources'][ps]
-                    if resource in fivem['resources']:
-                        fivem['resources'][resource] += 1
-                    else:
-                        fivem['resources'][resource] = 1
-            elif server['vars']['gamename'] == 'rdr3':
-                redm['players'] += len(server['players'])
-                for ps in range(len(server['resources'])):
-                    resource = server['resources'][ps]
-                    if resource in redm['resources']:
-                        redm['resources'][resource] += 1
-                    else:
-                        redm['resources'][resource] = 0
+            if 'Data' in serverLoaded: #Makes sure the Data key exists in the json file prevents errors and ensure accurate data
+                server = serverLoaded["Data"]
+                if server['vars']['gamename'] == 'gta5':
+                    fivem['players'] += len(server['players'])
+                    for ps in range(len(server['resources'])):
+                        resource = server['resources'][ps]
+                        if resource in fivem['resources']:
+                            fivem['resources'][resource] += 1
+                        else:
+                            fivem['resources'][resource] = 1
+                elif server['vars']['gamename'] == 'rdr3':
+                    redm['players'] += len(server['players'])
+                    for ps in range(len(server['resources'])):
+                        resource = server['resources'][ps]
+                        if resource in redm['resources']:
+                            redm['resources'][resource] += 1
+                        else:
+                            redm['resources'][resource] = 0
 
         gtaPath = sys.path[0] + '\data\\fivem_analyzed_data.json'
         with open(str(gtaPath), 'w') as file:
