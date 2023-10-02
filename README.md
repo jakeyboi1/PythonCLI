@@ -7,7 +7,7 @@
 - Epic Games Webscraper! (Shows the free games of the week on epic games!)
 
 # Installation
-- Make sure to have python installed, and the pick, and BeautifalSoup libraries. To install python on windows go to the windows store and download the latest python version. After you install python open a command prompt and run this command ```pip install pick```, then run ```pip install beautifulsoup4```
+- Make sure to have python installed, and the pick, cryptography, and BeautifalSoup libraries. To install python on windows go to the windows store and download the latest python version. After you install python open a command prompt and run this command ```pip install pick```, then run ```pip install beautifulsoup4```, then run ```pip install cryptography```
 - Thats it!
 
 # How to use
