@@ -3,8 +3,7 @@ from pick import pick
 
 def fileEncryptorMainMenu():
     mainOptions = ["Encrypt File", "Decrypt File"]  
-    title = "Please Choose an option."
-    option, index = pick(mainOptions, title)
+    option, index = pick(mainOptions, "Please Choose an option.")
     optionsArray = {
         "Encrypt File": lambda: fileEncryptor(),
         "Decrypt File": lambda: fileDecryptor()
