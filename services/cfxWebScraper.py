@@ -12,8 +12,8 @@ def cfxWebScraperMain():
     title = 'Please Choose an option.'
     option, index = pick(mainOptions, title)
     if option == 'Update Stored Cache':
-        r = requests.get('https://servers-frontend.fivem.net/api/servers/stream', headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}) #headers is needed otherwise status_code will be 403 aka failed/forbidden 200 is success
-        soup = str(BeautifulSoup(r.content, 'html.parser')) #If this is not the .split will not be usable and the parsed will always be zero. Likely because normally its all on one line of code and this makes it look like normal html so \n aka new line can detect the lines etc
+        initReq = requests.get('https://servers-frontend.fivem.net/api/servers/stream', headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}) #headers is needed otherwise status_code will be 403 aka failed/forbidden 200 is success
+        soup = str(BeautifulSoup(initReq.content, 'html.parser')) #If this is not the .split will not be usable and the parsed will always be zero. Likely because normally its all on one line of code and this makes it look like normal html so \n aka new line can detect the lines etc
 
         print("Server List Obtained!")
         parsed = []
@@ -39,18 +39,18 @@ def cfxWebScraperMain():
             recInfo = False
             recInfoLoaded = False
             rateLimitPrint = False #To only print being rate limited once
-            while repeat == False: #Checks if the key response exists (if the rate limiter is triggered the value of il will be {"response":"Too many requests."} which will break the code and also provide inaccurate data, so this is error handling basically) This whole while loop is done just because of rate limiting :( because of this, it is not viable to run this every time you want to check the data, it will have to be cached, then you will have to call the data from the cache, and the cache will need to be updated once a day ish, just not feasible to call this everytime just running through 100 ids takes about 3 minutes
-                il = requests.get("https://servers-frontend.fivem.net/api/servers/single/"+str(id), headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-                recInfo = il.content #Do not use beautifal soup here as it will break the ["Data"] below
+            while not repeat: #Checks if the key response exists (if the rate limiter is triggered the value of il will be {"response":"Too many requests."} which will break the code and also provide inaccurate data, so this is error handling basically) This whole while loop is done just because of rate limiting :( because of this, it is not viable to run this every time you want to check the data, it will have to be cached, then you will have to call the data from the cache, and the cache will need to be updated once a day ish, just not feasible to call this everytime just running through 100 ids takes about 3 minutes
+                getServerReq = requests.get("https://servers-frontend.fivem.net/api/servers/single/"+str(id), headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+                recInfo = getServerReq.content #Do not use beautifal soup here as it will break the ["Data"] below
                 recInfoLoaded = json.loads(recInfo)
                 if 'response' in recInfoLoaded:
                     if recInfoLoaded["response"] == 'Too many requests.':
-                        if rateLimitPrint == False:
+                        if not rateLimitPrint:
                             print("Currently being rate limited")
                             rateLimitPrint = True
                         time.sleep(2)
-                        il = requests.get("https://servers-frontend.fivem.net/api/servers/single/"+str(id), headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-                        recInfo = il.content
+                        getServerFailsafeReq = requests.get("https://servers-frontend.fivem.net/api/servers/single/"+str(id), headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+                        recInfo = getServerFailsafeReq.content
                         recInfoLoaded = json.loads(recInfo)
                     else: # This should never be triggered but incase it ever does get triggered we dont want it to break anything by not resetting repeat
                         repeat = True
