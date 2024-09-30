@@ -1,3 +1,5 @@
+# This repository is archived, and no longer being worked on!
+
 # PythonCLI by Jake2k4
 
 # Features
